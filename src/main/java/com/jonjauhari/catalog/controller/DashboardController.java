@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 
 public class DashboardController {
 
@@ -20,6 +21,9 @@ public class DashboardController {
 
     @FXML
     private Button addArtifactButton;
+
+    @FXML
+    private Button deleteArtifactButton;
 
     @FXML
     private Button refreshButton;
@@ -41,7 +45,7 @@ public class DashboardController {
                 if (empty || item == null || item.getName() == null) {
                     setText(null);
                 } else {
-                    setText(item.getName());
+                    setText(item.getId() + " | " + item.getName() + " | " + item.getDescription());
                 }
             }
         });
@@ -54,6 +58,7 @@ public class DashboardController {
     @FXML
     private void refreshList() {
         var artifacts = FXCollections.observableArrayList(database.getAllArtifacts());
+        System.out.println(Arrays.toString(artifacts.toArray()));
         artifactListView.setItems(artifacts);
     }
 
@@ -62,9 +67,24 @@ public class DashboardController {
         try {
             FXMLLoader loader = new FXMLLoader();
             URL xmlUrl = getClass().getResource("/addArtifactScene.fxml");
-            System.out.println(xmlUrl);
             loader.setLocation(xmlUrl);
             Parent root = loader.load();
+            detailsPane.getChildren().clear();
+            detailsPane.getChildren().add(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void deleteArtifactClicked() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            URL xmlUrl = getClass().getResource("/deleteArtifactScene.fxml");
+            loader.setLocation(xmlUrl);
+            Parent root = loader.load();
+            detailsPane.getChildren().clear();
             detailsPane.getChildren().add(root);
 
         } catch (IOException e) {

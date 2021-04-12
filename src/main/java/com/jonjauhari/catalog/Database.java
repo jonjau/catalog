@@ -39,23 +39,52 @@ public class Database {
         ps.close();
     }
 
+    public void deleteArtifact(Artifact artifact) {
+        try {
+            Connection conn = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
+
+            // more constraints maybe? need exact equality
+            String DELETE_QUERY = "DELETE FROM artifact WHERE artifact.id=?";
+            var ps = conn.prepareStatement(DELETE_QUERY);
+            ps.setLong(1, artifact.getId());
+            ps.execute();
+
+            conn.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Artifact getArtifact(long id) {
+        var artifacts = getAllArtifacts();
+        for (var artifact : artifacts) {
+            if (artifact.getId().equals(id)) {
+                return artifact;
+            }
+        }
+        return null;
+    }
+
     public List<Artifact> getAllArtifacts() {
         try {
             Connection conn = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
             String GET_QUERY = "SELECT * FROM artifact";
             var ps = conn.prepareStatement(GET_QUERY);
 
-            System.out.println(ps);
-            // Step 3: Execute the query or update query
             ResultSet result = ps.executeQuery();
 
             List<Artifact> artifacts = new ArrayList<>();
             while (result.next()) {
+                long id = result.getLong("id");
                 String name = result.getString("name");
                 String desc = result.getString("description");
-                var artifact = new Artifact(name, desc);
+                var artifact = new Artifact(id, name, desc);
                 artifacts.add(artifact);
             }
+            conn.close();
+            ps.close();
+
             return artifacts;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,21 +94,21 @@ public class Database {
 
     public void insertArtifact(Artifact artifact) {
         try {
-            // Step 1: Establishing a Connection and
             // try-with-resource statement will auto close the connection.
             Connection conn = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
             var ps = conn.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, artifact.getName());
             ps.setString(2, artifact.getDescription());
 
-            System.out.println(ps);
-            // Step 3: Execute the query or update query
             ps.executeUpdate();
+
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
                     artifact.setId(rs.getLong(1));
                 }
             }
+            conn.close();
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
