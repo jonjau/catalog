@@ -1,6 +1,9 @@
 package com.jonjauhari.catalog;
 
+import com.jonjauhari.catalog.model.Artifact;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,7 +14,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 
 
 /**
@@ -21,29 +23,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-
         stage.setTitle("Catalog");
-        stage.setWidth(600);
-        stage.setHeight(400);
-
         FXMLLoader loader = new FXMLLoader();
+        System.out.println("get" + getClass());
         URL xmlUrl = getClass().getResource("/dashboardScene.fxml");
+        System.out.println(xmlUrl);
         loader.setLocation(xmlUrl);
         Parent root = loader.load();
 
-        VBox vbox = new VBox();
-        List<Button> buttons = List.of(
-                new Button("Add Exhibition"),
-                new Button("Remove Exhibition"),
-                new Button("Add Artifact"),
-                new Button("Remove Artifact"),
-                new Button("Add Topic"),
-                new Button("Remove Topic")
-        );
-//        buttons.get(0).setOnAction(value -> System.out.println("sout"));
-        vbox.getChildren().addAll(buttons);
-
-        Label helloWorldLabel = new Label("Hello world!");
         stage.setScene(new Scene(root));
         stage.show();
     }
