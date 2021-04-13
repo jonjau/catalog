@@ -49,13 +49,31 @@ public class Database {
         }
     }
 
+    public void saveExhibition(Exhibition exhibition) {
+        if (exhibition.getId() == null) {
+            insertExhibition(exhibition);
+        } else {
+            updateExhibition(exhibition);
+        }
+    }
+
     public void updateExhibition(Exhibition exhibition) {
         try (
-                var ps = prepare(
+                var ps1 = prepare(
                         "UPDATE exhibition SET name = ?, description = ? WHERE id = ?",
-                        exhibition.getName(), exhibition.getDescription(), exhibition.getId())
+                        exhibition.getName(), exhibition.getDescription(), exhibition.getId());
         ) {
-            ps.executeUpdate();
+            ps1.executeUpdate();
+            for (var artifact : exhibition.getArtifacts()) {
+                try (
+                        var ps2 = prepare(
+                                "UPDATE artifact SET exhibitionId = ? WHERE artifact.id = ?",
+                                exhibition.getId(), artifact.getId())
+                ) {
+                    ps2.executeUpdate();
+                }
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -88,16 +106,42 @@ public class Database {
     }
 
     public List<Exhibition> getAllExhibitions() {
-        try (var ps = prepare("SELECT * FROM exhibition")) {
+        try (var ps =
+                     prepare("SELECT * FROM exhibition AS ex LEFT JOIN artifact AS ar ON ex.id " +
+                             "= ar.exhibitionId ORDER BY ex.id")) {
             ResultSet result = ps.executeQuery();
-            List<Exhibition> exhibitions = new ArrayList<>();
-            while (result.next()) {
-                long id = result.getLong("id");
-                String name = result.getString("name");
-                String desc = result.getString("description");
 
-                var exhibition = new Exhibition(id, name, desc);
-                exhibitions.add(exhibition);
+            List<Exhibition> exhibitions = new ArrayList<>();
+
+            List<Artifact> artifacts = new ArrayList<>();
+            Exhibition prevEx = null;
+            while (result.next()) {
+                long id = result.getLong(1);
+                String name = result.getString(2);
+                String desc = result.getString(3);
+                var currEx = new Exhibition(id, name, desc);
+
+                if (prevEx != null && !currEx.getId().equals(prevEx.getId())) {
+                    exhibitions.add(new Exhibition(prevEx.getId(), prevEx.getName(),
+                            prevEx.getDescription(),
+                            new ArrayList<>(artifacts)));
+                    artifacts.clear();
+                }
+
+                long arId = result.getLong(4);
+                String arName = result.getString(5);
+                String arDesc = result.getString(6);
+                if (!result.wasNull()) {
+                    artifacts.add(new Artifact(arId, arName, arDesc));
+                }
+                prevEx = currEx;
+            }
+            if (prevEx != null &&
+                    !exhibitions.get(exhibitions.size() - 1).getId().equals(prevEx.getId())) {
+                exhibitions.add(new Exhibition(
+                        prevEx.getId(), prevEx.getName(),
+                        prevEx.getDescription(),
+                        artifacts));
             }
             return exhibitions;
         } catch (SQLException e) {
@@ -134,6 +178,11 @@ public class Database {
                 String desc = result.getString("description");
 
                 var artifact = new Artifact(id, name, desc);
+
+                long exId = result.getLong("exhibitionId");
+                if (!result.wasNull()) {
+                    artifact.setLocation(getExhibition(exId));
+                }
                 artifacts.add(artifact);
             }
             // ResultSet is autoclosed when its PreparedStatement is closed
@@ -144,10 +193,18 @@ public class Database {
         }
     }
 
+    public void saveArtifact(Artifact artifact) {
+        if (artifact.getId() == null) {
+            insertArtifact(artifact);
+        } else {
+            updateArtifact(artifact);
+        }
+    }
+
     public void updateArtifact(Artifact artifact) {
         try (
                 var ps = prepare(
-                        "UPDATE artifact SET name = ?, description = ? WHERE id = ?",
+                        "UPDATE artifact SET name=?, description=? WHERE id=?",
                         artifact.getName(), artifact.getDescription(), artifact.getId())
         ) {
             ps.executeUpdate();

@@ -13,6 +13,8 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DashboardController {
 
@@ -70,14 +72,17 @@ public class DashboardController {
 
     @FXML
     private void refreshArtifacts() {
-        var artifacts = FXCollections.observableArrayList(database.getAllArtifacts());
+        List<Artifact> inStorage = database.getAllArtifacts().stream().filter(
+                artifact -> artifact.getLocation() == null
+        ).collect(Collectors.toList());
+
+        var artifacts = FXCollections.observableArrayList(inStorage);
         artifactListView.setItems(artifacts);
     }
 
     @FXML
     private void refreshExhibitions() {
         var exhibitions = FXCollections.observableArrayList(database.getAllExhibitions());
-        System.out.println(exhibitions);
         exhibitionListView.setItems(exhibitions);
     }
 
@@ -118,15 +123,17 @@ public class DashboardController {
     @FXML
     private void editExhibitionClicked() {
         var selectedExhibition = exhibitionListView.getSelectionModel().getSelectedItem();
+        var artifactSelections = artifactListView.getItems();
         changeDetailsPane("/editExhibitionScene.fxml", new EditExhibitionController(database,
-                selectedExhibition));
+                selectedExhibition, artifactSelections));
     }
 
     @FXML
     private void addExhibitionClicked() {
         var newExhibition = new Exhibition("", "");
+        var artifactSelections = artifactListView.getItems();
         changeDetailsPane("/editExhibitionScene.fxml", new EditExhibitionController(database,
-                newExhibition));
+                newExhibition, artifactSelections));
     }
 
     @FXML

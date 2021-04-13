@@ -4,6 +4,7 @@ public class Artifact {
     private Long id;
     private String name;
     private String description;
+    private Exhibition location;
 
     public Artifact(Long id, String name, String description) {
         this.id = id;
@@ -13,6 +14,14 @@ public class Artifact {
 
     public Artifact(String name, String description) {
         this(null, name, description);
+    }
+
+    public Exhibition getLocation() {
+        return location;
+    }
+
+    public void setLocation(Exhibition location) {
+        this.location = location;
     }
 
     public Long getId() {
@@ -41,10 +50,6 @@ public class Artifact {
 
     @Override
     public String toString() {
-        return "Artifact{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+        return "#" + id + " " + name + " | " + description;
     }
 }

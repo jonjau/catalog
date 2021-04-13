@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -10,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
- <AnchorPane prefHeight="500.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
+ <AnchorPane prefHeight="500.0" prefWidth="514.0" VBox.vgrow="ALWAYS">
    <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Edit Exhibition" textAlignment="CENTER" wrapText="false">
      <font>
        <Font size="18.0" fx:id="x1" />
@@ -19,10 +21,16 @@
        <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
      </textFill>
    </Label>
-   <Button fx:id="mainButton" layoutX="103.0" layoutY="424.0" mnemonicParsing="false" text="Save exhibition" AnchorPane.bottomAnchor="50.39999999999998" />
-      <TextField fx:id="nameTextField" layoutX="126.0" layoutY="75.0" prefHeight="26.0" prefWidth="144.0" AnchorPane.rightAnchor="30.0" />
+   <Button fx:id="mainButton" layoutX="384.0" layoutY="446.0" mnemonicParsing="false" text="Save exhibition" AnchorPane.bottomAnchor="28.399999999999977" />
+      <TextField fx:id="nameTextField" layoutX="79.0" layoutY="74.0" prefHeight="26.0" prefWidth="132.0" AnchorPane.rightAnchor="303.0" />
       <Label layoutX="36.0" layoutY="79.0" text="Name" AnchorPane.leftAnchor="30.0" />
       <Label layoutX="36.0" layoutY="126.0" text="Description" AnchorPane.leftAnchor="30.0" />
-      <TextArea fx:id="descriptionTextArea" layoutX="30.0" layoutY="159.0" prefHeight="139.0" prefWidth="240.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+      <TextArea fx:id="descriptionTextArea" layoutX="30.0" layoutY="159.0" prefHeight="318.0" prefWidth="180.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="304.0" />
+      <ListView fx:id="artifactListView" layoutX="247.0" layoutY="159.0" prefHeight="181.0" prefWidth="234.0" />
+      <Label layoutX="247.0" layoutY="126.0" text="Artifacts on display" />
+      <ChoiceBox fx:id="addArtifactChoiceBox" layoutX="338.0" layoutY="362.0" prefHeight="26.0" prefWidth="142.0" />
+      <Label layoutX="247.0" layoutY="366.0" text="Add artifact" />
+      <Label layoutX="247.0" layoutY="406.0" text="Delete Artifact" />
+      <ChoiceBox layoutX="338.0" layoutY="402.0" prefHeight="26.0" prefWidth="142.0" />
  </AnchorPane>
 </VBox>

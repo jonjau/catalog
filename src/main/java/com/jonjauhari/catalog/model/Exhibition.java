@@ -20,8 +20,20 @@ public class Exhibition {
         this.description = description;
     }
 
+    public Exhibition(Long id, String name, String description, List<Artifact> artifacts) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.artifacts = artifacts;
+    }
+
     public void addArtifact(Artifact artifact) {
+        artifact.setLocation(this);
         artifacts.add(artifact);
+    }
+
+    public List<Artifact> getArtifacts() {
+        return artifacts;
     }
 
     public Long getId() {
@@ -54,6 +66,7 @@ public class Exhibition {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", artifacts=" + artifacts +
                 '}';
     }
 }
