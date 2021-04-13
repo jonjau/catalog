@@ -1,9 +1,13 @@
 package com.jonjauhari.catalog.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Exhibition {
     private Long id;
     private String name;
     private String description;
+    private List<Artifact> artifacts = new ArrayList<>();
 
     public Exhibition(String name, String description) {
         this.name = name;
@@ -14,6 +18,10 @@ public class Exhibition {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    public void addArtifact(Artifact artifact) {
+        artifacts.add(artifact);
     }
 
     public Long getId() {

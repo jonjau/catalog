@@ -36,12 +36,12 @@
                     <Color red="0.624" green="0.624" blue="0.624" />
                 </textFill>
             </Label>
-            <Button  layoutX="14.0" layoutY="67.0" mnemonicParsing="false" onAction="#addArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Add artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+            <Button layoutX="14.0" layoutY="67.0" mnemonicParsing="false" onAction="#addArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Add artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          <Button  layoutX="14.0" layoutY="111.0" mnemonicParsing="false" onAction="#deleteArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Delete artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          <Button  layoutX="14.0" layoutY="180.0" mnemonicParsing="false" onAction="#addExhibitionClicked" prefHeight="26.0" prefWidth="194.0" text="Add exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          <Button layoutX="14.0" layoutY="223.0" mnemonicParsing="false" onAction="#deleteExhibitionClicked" prefHeight="26.0" prefWidth="194.0" text="Delete exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-         <Button  layoutX="14.0" layoutY="282.0" mnemonicParsing="false" onAction="#addArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Add topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-         <Button layoutX="14.0" layoutY="328.0" mnemonicParsing="false" onAction="#addArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Delete topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         <Button layoutX="14.0" layoutY="282.0" mnemonicParsing="false" onAction="#editArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Add topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         <Button layoutX="14.0" layoutY="328.0" mnemonicParsing="false" onAction="#editArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Delete topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
         </AnchorPane>
       <AnchorPane prefWidth="160.0">
          <children>

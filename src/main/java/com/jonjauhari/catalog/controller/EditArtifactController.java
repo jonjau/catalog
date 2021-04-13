@@ -7,7 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-public class AddArtifactController {
+public class EditArtifactController {
 
     @FXML
     private Button mainButton;
@@ -19,21 +19,32 @@ public class AddArtifactController {
     private TextArea descriptionTextArea;
 
     private Database database;
+    private Artifact artifact;
 
-    public AddArtifactController(Database database) {
+    public EditArtifactController(Database database, Artifact artifact) {
         this.database = database;
+        this.artifact = artifact;
     }
 
     @FXML
     public void initialize() {
-        mainButton.setOnAction(e -> addArtifactClicked());
+        nameTextField.setText(artifact.getName());
+        descriptionTextArea.setText(artifact.getDescription());
+        mainButton.setOnAction(e -> saveArtifact());
     }
 
     @FXML
-    private void addArtifactClicked() {
+    private void saveArtifact() {
         var name = nameTextField.getText();
         var description = descriptionTextArea.getText();
-        var artifact = new Artifact(name, description);
-        database.insertArtifact(artifact);
+
+        artifact.setName(name);
+        artifact.setDescription(description);
+
+        if (artifact.getId() != null) {
+            database.updateArtifact(artifact);
+        } else {
+            database.insertArtifact(artifact);
+        }
     }
 }

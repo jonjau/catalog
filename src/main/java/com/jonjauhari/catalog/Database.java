@@ -12,8 +12,6 @@ public class Database {
     private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/catalog?useSSL=false";
     private static final String DB_USER = "catalog";
     private static final String DB_PASSWORD = "catalog";
-    private static final String INSERT_QUERY = "INSERT INTO artifact (name, description) " +
-            "VALUES (?, ?)";
 
     private String url = DB_CONNECTION;
     private String user = DB_USER;
@@ -44,8 +42,20 @@ public class Database {
     }
 
     public void deleteExhibition(Exhibition exhibition) {
-        try (var ps = prepare("DELETE FROM exhibition WHERE exhibition.id=?", exhibition.getId())) {
+        try (var ps = prepare("DELETE FROM exhibition WHERE id=?", exhibition.getId())) {
             ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateExhibition(Exhibition exhibition) {
+        try (
+                var ps = prepare(
+                        "UPDATE exhibition SET name = ?, description = ? WHERE id = ?",
+                        exhibition.getName(), exhibition.getDescription(), exhibition.getId())
+        ) {
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -97,7 +107,7 @@ public class Database {
     }
 
     public void deleteArtifact(Artifact artifact) {
-        try (var ps = prepare("DELETE FROM artifact WHERE artifact.id=?", artifact.getId())) {
+        try (var ps = prepare("DELETE FROM artifact WHERE id=?", artifact.getId())) {
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -131,6 +141,18 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void updateArtifact(Artifact artifact) {
+        try (
+                var ps = prepare(
+                        "UPDATE artifact SET name = ?, description = ? WHERE id = ?",
+                        artifact.getName(), artifact.getDescription(), artifact.getId())
+        ) {
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
