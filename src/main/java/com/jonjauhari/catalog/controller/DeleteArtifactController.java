@@ -16,6 +16,7 @@ public class DeleteArtifactController {
     @FXML
     private void deleteArtifactClicked() {
 
+        // FIXME: non-existent artifact!
         var db = new Database();
         long id = Long.parseLong(idTextField.getText());
         var toDelete = db.getArtifact(id);

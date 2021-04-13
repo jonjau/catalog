@@ -1,11 +1,13 @@
 package com.jonjauhari.catalog;
 
 import com.jonjauhari.catalog.model.Artifact;
+import com.jonjauhari.catalog.model.Exhibition;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: intialise with starting data, abstract into repositories
 public class Database {
     private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/catalog?useSSL=false";
     private static final String DB_USER = "catalog";
@@ -32,25 +34,22 @@ public class Database {
         }
     }
 
-    private void execute(String query, Object... parameters) throws SQLException {
+    private PreparedStatement prepare(String query, Object... parameters) throws SQLException {
         var conn = getConnection();
-        var ps = conn.prepareStatement(query);
-        ps.executeQuery();
-        ps.close();
+        var ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        for (int i = 0; i < parameters.length; i++) {
+            ps.setObject(i + 1, parameters[i]);
+        }
+        return ps;
+    }
+
+    public void insertExhibition(Exhibition exhibition) {
+
     }
 
     public void deleteArtifact(Artifact artifact) {
-        try {
-            Connection conn = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
-
-            // more constraints maybe? need exact equality
-            String DELETE_QUERY = "DELETE FROM artifact WHERE artifact.id=?";
-            var ps = conn.prepareStatement(DELETE_QUERY);
-            ps.setLong(1, artifact.getId());
+        try (var ps = prepare("DELETE FROM artifact WHERE artifact.id=?", artifact.getId())) {
             ps.execute();
-
-            conn.close();
-            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -67,24 +66,18 @@ public class Database {
     }
 
     public List<Artifact> getAllArtifacts() {
-        try {
-            Connection conn = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
-            String GET_QUERY = "SELECT * FROM artifact";
-            var ps = conn.prepareStatement(GET_QUERY);
-
+        try (var ps = prepare("SELECT * FROM artifact")) {
             ResultSet result = ps.executeQuery();
-
             List<Artifact> artifacts = new ArrayList<>();
             while (result.next()) {
                 long id = result.getLong("id");
                 String name = result.getString("name");
                 String desc = result.getString("description");
+
                 var artifact = new Artifact(id, name, desc);
                 artifacts.add(artifact);
             }
-            conn.close();
-            ps.close();
-
+            // ResultSet is autoclosed when its PreparedStatement is closed
             return artifacts;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -93,22 +86,16 @@ public class Database {
     }
 
     public void insertArtifact(Artifact artifact) {
-        try {
-            // try-with-resource statement will auto close the connection.
-            Connection conn = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
-            var ps = conn.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, artifact.getName());
-            ps.setString(2, artifact.getDescription());
-
+        try (
+                var ps = prepare(
+                        "INSERT INTO artifact (name, description) VALUES (?, ?)",
+                        artifact.getName(), artifact.getDescription())
+        ) {
             ps.executeUpdate();
-
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    artifact.setId(rs.getLong(1));
-                }
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                artifact.setId(rs.getLong(1));
             }
-            conn.close();
-            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

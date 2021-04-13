@@ -26,7 +26,7 @@ public class Main extends Application {
         stage.setTitle("Catalog");
         FXMLLoader loader = new FXMLLoader();
         System.out.println("get" + getClass());
-        URL xmlUrl = getClass().getResource("/dashboardScene.fxml");
+        URL xmlUrl = getClass().getResource("/dashboardScene2.fxml");
         System.out.println(xmlUrl);
         loader.setLocation(xmlUrl);
         Parent root = loader.load();

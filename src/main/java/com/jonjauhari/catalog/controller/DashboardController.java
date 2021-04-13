@@ -2,6 +2,7 @@ package com.jonjauhari.catalog.controller;
 
 import com.jonjauhari.catalog.Database;
 import com.jonjauhari.catalog.model.Artifact;
+import com.jonjauhari.catalog.model.Exhibition;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,13 +27,16 @@ public class DashboardController {
     private Button deleteArtifactButton;
 
     @FXML
-    private Button refreshButton;
+    private Button refreshArtifactsButton;
 
     @FXML
     private Pane detailsPane;
 
     @FXML
     private ListView<Artifact> artifactListView;
+
+    @FXML
+    private ListView<Exhibition> exhibitionListView;
 
     @FXML
     public void initialize() {
@@ -64,6 +68,10 @@ public class DashboardController {
 
     @FXML
     private void addArtifactClicked() {
+
+        var artifact = new Artifact("asdsad", "asd");
+        database.insertArtifact(artifact);
+
         try {
             FXMLLoader loader = new FXMLLoader();
             URL xmlUrl = getClass().getResource("/addArtifactScene.fxml");
