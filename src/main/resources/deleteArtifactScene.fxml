@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jonjauhari.catalog.controller.DeleteArtifactController">
+<VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
  <AnchorPane prefHeight="500.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
    <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Delete Artifact" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
      <font>
@@ -18,7 +18,7 @@
        <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
      </textFill>
    </Label>
-   <Button fx:id="mainButton" layoutX="104.0" layoutY="423.0" mnemonicParsing="false" onAction="#deleteArtifactClicked" text="Delete artifact" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
+   <Button fx:id="mainButton" layoutX="104.0" layoutY="423.0" mnemonicParsing="false" text="Delete artifact" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
       <TextField fx:id="idTextField" layoutX="99.0" layoutY="123.0" prefHeight="26.0" prefWidth="99.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
       <Label layoutX="90.0" layoutY="88.0" text="ID of artifact to delete" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
  </AnchorPane>

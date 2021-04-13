@@ -8,14 +8,27 @@ import javafx.scene.control.TextField;
 public class DeleteExhibitionController {
 
     @FXML
+    private Button mainButton;
+
+    @FXML
     private TextField idTextField;
+
+    private Database database;
+
+    public DeleteExhibitionController(Database database) {
+        this.database = database;
+    }
+
+    @FXML
+    public void initialize() {
+        mainButton.setOnAction(e -> deleteExhibitionClicked());
+    }
 
     @FXML
     private void deleteExhibitionClicked() {
 
-        var db = new Database();
         long id = Long.parseLong(idTextField.getText());
-        var toDelete = db.getExhibition(id);
-        db.deleteExhibition(toDelete);
+        var toDelete = database.getExhibition(id);
+        database.deleteExhibition(toDelete);
     }
 }

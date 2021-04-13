@@ -1,5 +1,6 @@
 package com.jonjauhari.catalog.controller;
 
+import com.jonjauhari.catalog.Context;
 import com.jonjauhari.catalog.Database;
 import com.jonjauhari.catalog.model.Artifact;
 import com.jonjauhari.catalog.model.Exhibition;
@@ -9,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
@@ -31,6 +33,11 @@ public class DashboardController {
     public void initialize() {
         refreshArtifacts();
         refreshExhibitions();
+
+//        artifactListView.getSelectionModel().getSelectedItems().addListener(
+//        );
+        artifactListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         artifactListView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(Artifact item, boolean empty) {
@@ -74,10 +81,11 @@ public class DashboardController {
         exhibitionListView.setItems(exhibitions);
     }
 
-    private void changeDetailsPane(String FXMLFilePath) {
+    private void changeDetailsPane(String FXMLFilePath, Object controller) {
         try {
             FXMLLoader loader = new FXMLLoader();
             URL xmlUrl = getClass().getResource(FXMLFilePath);
+            loader.setController(controller);
             loader.setLocation(xmlUrl);
             Parent root = loader.load();
             detailsPane.getChildren().clear();
@@ -90,21 +98,45 @@ public class DashboardController {
 
     @FXML
     private void addExhibitionClicked() {
-        changeDetailsPane("/addExhibitionScene.fxml");
+//        changeDetailsPane("/addExhibitionScene.fxml", new AddExhibitionController(database));
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            URL xmlUrl = getClass().getResource("/addExhibitionScene.fxml");
+            loader.setController(new AddExhibitionController(database));
+            loader.setLocation(xmlUrl);
+            Parent root = loader.load();
+            detailsPane.getChildren().clear();
+            detailsPane.getChildren().add(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void addArtifactClicked() {
-        changeDetailsPane("/addArtifactScene.fxml");
+//        changeDetailsPane("/addArtifactScene.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            URL xmlUrl = getClass().getResource("/addArtifactScene.fxml");
+            loader.setController(new AddArtifactController(database));
+            loader.setLocation(xmlUrl);
+            Parent root = loader.load();
+            detailsPane.getChildren().clear();
+            detailsPane.getChildren().add(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void deleteArtifactClicked() {
-        changeDetailsPane("/deleteArtifactScene.fxml");
+        changeDetailsPane("/deleteArtifactScene.fxml", new DeleteArtifactController(database));
     }
 
     @FXML
     private void deleteExhibitionClicked() {
-        changeDetailsPane("/deleteExhibitionScene.fxml");
+        changeDetailsPane("/deleteExhibitionScene.fxml", new DeleteExhibitionController(database));
     }
 }
