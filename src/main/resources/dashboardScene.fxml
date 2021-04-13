@@ -7,9 +7,9 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -20,24 +20,13 @@
 <VBox prefHeight="600.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jonjauhari.catalog.controller.DashboardController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem mnemonicParsing="false" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-            <MenuItem mnemonicParsing="false" text="Revert" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Quit" />
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+            <MenuItem mnemonicParsing="false" text="About Catalog" />
         </Menu>
     </MenuBar>
-    <SplitPane dividerPositions="0.18992411467116355, 0.6663153456998314" focusTraversable="true" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.14987352445193927, 0.5992833052276559" focusTraversable="true" VBox.vgrow="ALWAYS">
         <AnchorPane>
             <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Controls" textAlignment="CENTER" wrapText="false">
                 <font>
@@ -49,18 +38,42 @@
             </Label>
             <Button fx:id="addArtifactButton" layoutX="14.0" layoutY="67.0" mnemonicParsing="false" onAction="#addArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Add artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          <Button fx:id="deleteArtifactButton" layoutX="14.0" layoutY="111.0" mnemonicParsing="false" onAction="#deleteArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Delete artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-         <Button fx:id="addArtifactButton2" layoutX="14.0" layoutY="180.0" mnemonicParsing="false" onAction="#addArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Add exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-         <Button fx:id="addArtifactButton3" layoutX="14.0" layoutY="223.0" mnemonicParsing="false" onAction="#addArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Delete exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         <Button fx:id="addExhibitionButton" layoutX="14.0" layoutY="180.0" mnemonicParsing="false" onAction="#addExhibitionClicked" prefHeight="26.0" prefWidth="194.0" text="Add exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         <Button fx:id="deleteExhibitionButton" layoutX="14.0" layoutY="223.0" mnemonicParsing="false" onAction="#deleteExhibitionClicked" prefHeight="26.0" prefWidth="194.0" text="Delete exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          <Button fx:id="addArtifactButton21" layoutX="14.0" layoutY="282.0" mnemonicParsing="false" onAction="#addArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Add topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          <Button fx:id="addArtifactButton211" layoutX="14.0" layoutY="328.0" mnemonicParsing="false" onAction="#addArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Delete topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
         </AnchorPane>
-        <ScrollPane prefWidth="593.0">
-            <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="546.0">
-                <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="View" textAlignment="CENTER" wrapText="false" />
-                <ListView fx:id="artifactListView" layoutX="15.0" layoutY="59.0" prefHeight="351.0" prefWidth="400.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="59.0" />
-            <Button fx:id="refreshButton" layoutX="356.0" layoutY="15.0" mnemonicParsing="false" onAction="#refreshList" text="Refresh" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
-            </AnchorPane>
-        </ScrollPane>
+      <AnchorPane fx:id="detailsPane1" prefWidth="160.0">
+         <children>
+                <Label alignment="CENTER" font="$x1" style="&#10;" text="View" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
+               <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="546.0">
+               <TabPane layoutX="14.0" layoutY="41.0" prefHeight="472.0" prefWidth="413.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0">
+                 <tabs>
+                   <Tab text="Artifacts">
+                     <content>
+                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              <children>
+                                 <Button fx:id="refreshArtifactsButton" mnemonicParsing="false" onAction="#refreshArtifacts" text="Refresh" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                                     <ListView fx:id="artifactListView" prefHeight="351.0" prefWidth="400.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="59.0" />
+                              </children>
+                           </AnchorPane>
+                     </content>
+                   </Tab>
+                   <Tab text="Exhibitions">
+                     <content>
+                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              <children>
+                                 <Button fx:id="refreshExhibitionsButton" mnemonicParsing="false" onAction="#refreshExhibitions" text="Refresh" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                                 <ListView fx:id="exhibitionListView" prefHeight="351.0" prefWidth="400.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="59.0" />
+                              </children>
+                           </AnchorPane>
+                     </content>
+                   </Tab>
+                 </tabs>
+               </TabPane>
+               </AnchorPane>
+         </children>
+      </AnchorPane>
         <AnchorPane fx:id="detailsPane" prefWidth="160.0" />
     </SplitPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">

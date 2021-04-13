@@ -43,8 +43,57 @@ public class Database {
         return ps;
     }
 
-    public void insertExhibition(Exhibition exhibition) {
+    public void deleteExhibition(Exhibition exhibition) {
+        try (var ps = prepare("DELETE FROM exhibition WHERE exhibition.id=?", exhibition.getId())) {
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void insertExhibition(Exhibition exhibition) {
+        try (
+                var ps = prepare(
+                        "INSERT INTO exhibition (name, description) VALUES (?, ?)",
+                        exhibition.getName(), exhibition.getDescription())
+        ) {
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                exhibition.setId(rs.getLong(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Exhibition getExhibition(long id) {
+        var exhibitions = getAllExhibitions();
+        for (var exhibition : exhibitions) {
+            if (exhibition.getId().equals(id)) {
+                return exhibition;
+            }
+        }
+        return null;
+    }
+
+    public List<Exhibition> getAllExhibitions() {
+        try (var ps = prepare("SELECT * FROM exhibition")) {
+            ResultSet result = ps.executeQuery();
+            List<Exhibition> exhibitions = new ArrayList<>();
+            while (result.next()) {
+                long id = result.getLong("id");
+                String name = result.getString("name");
+                String desc = result.getString("description");
+
+                var exhibition = new Exhibition(id, name, desc);
+                exhibitions.add(exhibition);
+            }
+            return exhibitions;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void deleteArtifact(Artifact artifact) {

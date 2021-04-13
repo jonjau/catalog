@@ -1,24 +1,27 @@
 package com.jonjauhari.catalog.model;
 
-import java.util.List;
-
 public class Exhibition {
     private Long id;
     private String name;
     private String description;
-    private List<Artifact> artifacts;
 
-    public Exhibition(String name, String description, List<Artifact> artifacts, Long id) {
+    public Exhibition(String name, String description) {
         this.name = name;
         this.description = description;
-        this.artifacts = artifacts;
-        this.id = id;
     }
 
-    public Exhibition(String name, String description, List<Artifact> artifacts) {
+    public Exhibition(Long id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
-        this.artifacts = artifacts;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -37,11 +40,12 @@ public class Exhibition {
         this.description = description;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "Exhibition{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
