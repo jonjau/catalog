@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+/**
+ * Controller responsible for the secondary view that allows users to delete exhibitions.
+ */
 public class DeleteExhibitionController {
 
     @FXML
@@ -15,12 +18,15 @@ public class DeleteExhibitionController {
 
     private ExhibitionRepository exhibitionRepo;
 
+    /**
+     * @param exhibitionRepo exhibition repo to delete exhibitions from
+     */
     public DeleteExhibitionController(ExhibitionRepository exhibitionRepo) {
         this.exhibitionRepo = exhibitionRepo;
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         mainButton.setOnAction(e -> deleteExhibitionClicked());
     }
 
@@ -29,6 +35,10 @@ public class DeleteExhibitionController {
 
         long id = Long.parseLong(idTextField.getText());
         var toDelete = exhibitionRepo.findById(id);
+        if (toDelete == null) {
+            //  non-existent exhibition, do nothing
+            return;
+        }
         exhibitionRepo.delete(toDelete);
     }
 }

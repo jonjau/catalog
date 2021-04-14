@@ -8,11 +8,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Repository responsible for controlling access to Artifacts in the database
+ */
 public class ArtifactRepository implements Repository<Artifact, Long> {
 
     private Database db;
     private ExhibitionRepository exRepo;
 
+    /**
+     * @param db database connection for this repo
+     * @param exRepo exhibition repo for searching up artifact's locations
+     */
     public ArtifactRepository(Database db, ExhibitionRepository exRepo) {
         this.db = db;
         this.exRepo = exRepo;
@@ -40,7 +47,7 @@ public class ArtifactRepository implements Repository<Artifact, Long> {
 
     @Override
     public List<Artifact> findAll() {
-        try (var ps = db.prepare("SELECT * FROM artifact")) {
+        try (var ps = db.prepareQuery("SELECT * FROM artifact")) {
             ResultSet result = ps.executeQuery();
             List<Artifact> artifacts = new ArrayList<>();
             while (result.next()) {
@@ -57,6 +64,7 @@ public class ArtifactRepository implements Repository<Artifact, Long> {
 
                 long exId = result.getLong("exhibitionId");
                 if (!result.wasNull()) {
+                    // if artifact has a location, look it up then set it
                     artifact.setLocation(exRepo.findById(exId));
                 }
                 artifacts.add(artifact);
@@ -71,17 +79,20 @@ public class ArtifactRepository implements Repository<Artifact, Long> {
 
     @Override
     public void delete(Artifact artifact){
-        try (var ps = db.prepare("DELETE FROM artifact WHERE id=?", artifact.getId())) {
+        try (var ps = db.prepareQuery("DELETE FROM artifact WHERE id=?", artifact.getId())) {
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * @param artifact artifact to update
+     */
     private void updateArtifact(Artifact artifact) {
         var dimensions = artifact.getDimensions();
         try (
-                var ps = db.prepare(
+                var ps = db.prepareQuery(
                         "UPDATE artifact SET name=?, description=?, length=?, width=?, " +
                                 "height=?, weight=? WHERE id=?",
                         artifact.getName(), artifact.getDescription(),
@@ -94,10 +105,15 @@ public class ArtifactRepository implements Repository<Artifact, Long> {
         }
     }
 
+    /**
+     * insert an artifact that doesn't have an ID into the database, the artifact's ID will be set
+     * by this function
+     * @param artifact new artifact to insert
+     */
     private void insertArtifact(Artifact artifact) {
         var dimensions = artifact.getDimensions();
         try (
-                var ps = db.prepare(
+                var ps = db.prepareQuery(
                         "INSERT INTO artifact (name, description, length, width, height, weight) " +
                                 "VALUES (?, ?, ?, ?, ?, ?)",
                         artifact.getName(), artifact.getDescription(), dimensions.length,

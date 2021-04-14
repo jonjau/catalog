@@ -9,10 +9,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Repository responsible for controlling access to Exhibition in the database
+ */
 public class ExhibitionRepository implements Repository<Exhibition, Long> {
 
     private Database db;
 
+    /**
+     * @param db database connection for this repo
+     */
     public ExhibitionRepository(Database db) {
         this.db = db;
     }
@@ -40,13 +46,12 @@ public class ExhibitionRepository implements Repository<Exhibition, Long> {
     @Override
     public List<Exhibition> findAll() {
         try (var ps =
-                     db.prepare("SELECT * FROM exhibition AS ex LEFT JOIN artifact AS ar ON ex.id" +
-                             " " +
-                             "= ar.exhibitionId ORDER BY ex.id")) {
+                     db.prepareQuery("SELECT * FROM exhibition AS ex LEFT JOIN artifact AS ar ON " +
+                             "ex.id = ar.exhibitionId ORDER BY ex.id")) {
             ResultSet result = ps.executeQuery();
-
             List<Exhibition> exhibitions = new ArrayList<>();
 
+            // manually aggregate each exhibition's artifacts into lists, sliding window style
             List<Artifact> artifacts = new ArrayList<>();
             Exhibition prevEx = null;
             while (result.next()) {
@@ -56,6 +61,7 @@ public class ExhibitionRepository implements Repository<Exhibition, Long> {
                 var currEx = new Exhibition(id, name, desc);
 
                 if (prevEx != null && !currEx.getId().equals(prevEx.getId())) {
+                    // moving on to new exhibition, save the list we've aggregated so far and reset
                     exhibitions.add(new Exhibition(prevEx.getId(), prevEx.getName(),
                             prevEx.getDescription(),
                             new ArrayList<>(artifacts)));
@@ -70,12 +76,15 @@ public class ExhibitionRepository implements Repository<Exhibition, Long> {
                 double arHeight = result.getDouble(9);
                 double arWeight = result.getDouble(10);
 
+                // if the last artifact field was not null, we assume all the other artifact fields
+                // were not null, so add that artifact to the current aggregated list
                 if (!result.wasNull()) {
                     artifacts.add(new Artifact(arId, arName, arDesc, new Dimensions(arLength,
                             arWidth, arHeight), arWeight));
                 }
                 prevEx = currEx;
             }
+            // check for the last exhibition, finishing the sliding window
             if (prevEx != null &&
                     !exhibitions.get(exhibitions.size() - 1).getId().equals(prevEx.getId())) {
                 exhibitions.add(new Exhibition(
@@ -92,24 +101,30 @@ public class ExhibitionRepository implements Repository<Exhibition, Long> {
 
     @Override
     public void delete(Exhibition exhibition) {
-        try (var ps = db.prepare("DELETE FROM exhibition WHERE id=?", exhibition.getId())) {
+        try (var ps = db.prepareQuery("DELETE FROM exhibition WHERE id=?", exhibition.getId())) {
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Update an exhibition, and also its contained artifacts
+     * @param exhibition exhibition to update
+     */
     private void updateExhibition(Exhibition exhibition) {
+        // hack: delete then reinsert...
         delete(exhibition);
         try (
-                var ps1 = db.prepare(
+                var ps1 = db.prepareQuery(
                         "INSERT INTO exhibition (id, name, description) VALUES (?, ?, ?)",
                         exhibition.getId(), exhibition.getName(), exhibition.getDescription())
         ) {
             ps1.executeUpdate();
+            // would be better to do this in a single SQL query
             for (var artifact : exhibition.getArtifacts()) {
                 try (
-                        var ps2 = db.prepare(
+                        var ps2 = db.prepareQuery(
                                 "UPDATE artifact SET exhibitionId = ? WHERE artifact.id = ?",
                                 exhibition.getId(), artifact.getId())
                 ) {
@@ -121,9 +136,14 @@ public class ExhibitionRepository implements Repository<Exhibition, Long> {
         }
     }
 
+    /**
+     * insert an exhibition that doesn't have an ID into the database, the exhibition's ID will be
+     * set by this function
+     * @param exhibition exhibition to insert
+     */
     private void insertExhibition(Exhibition exhibition) {
         try (
-                var ps = db.prepare(
+                var ps = db.prepareQuery(
                         "INSERT INTO exhibition (name, description) VALUES (?, ?)",
                         exhibition.getName(), exhibition.getDescription())
         ) {

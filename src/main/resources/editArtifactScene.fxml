@@ -21,7 +21,7 @@
      </textFill>
    </Label>
    <Button fx:id="mainButton" layoutX="110.0" layoutY="447.0" mnemonicParsing="false" text="Save artifact" AnchorPane.bottomAnchor="27.399999999999977" />
-      <TextField fx:id="volumeTextField" layoutX="191.0" layoutY="397.0" prefHeight="26.0" prefWidth="61.0" AnchorPane.rightAnchor="48.0" />
+      <TextField fx:id="volumeTextField" editable="false" layoutX="191.0" layoutY="397.0" prefHeight="26.0" prefWidth="61.0" AnchorPane.rightAnchor="48.0" />
       <Label layoutX="36.0" layoutY="79.0" text="Name" AnchorPane.leftAnchor="30.0" />
       <Label layoutX="36.0" layoutY="126.0" text="Description" AnchorPane.leftAnchor="30.0" />
       <TextArea fx:id="descriptionTextArea" layoutX="30.0" layoutY="159.0" prefHeight="139.0" prefWidth="240.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />

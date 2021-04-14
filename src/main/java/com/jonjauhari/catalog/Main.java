@@ -14,12 +14,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
-
 /**
- * JavaFX App
+ * Main JavaFX App
  */
 public class Main extends Application {
 
+    // Data sources for the application
     private ExhibitionRepository exhibitionRepo;
     private ArtifactRepository artifactRepo;
 
@@ -28,19 +28,31 @@ public class Main extends Application {
 
         initializeDataSources();
 
+        // Load the main dashboard view, injecting the data sources to the controller in charge
         FXMLLoader loader = new FXMLLoader();
         URL xmlUrl = getClass().getResource("/dashboardScene.fxml");
         loader.setController(new DashboardController(artifactRepo, exhibitionRepo));
         loader.setLocation(xmlUrl);
         Parent root = loader.load();
 
+        // display the scene on a stage (window)
         stage.setTitle("Catalog");
         stage.setScene(new Scene(root));
         stage.show();
     }
 
+    /**
+     * Sets up a database connection, reading the URL and credentials from a config file
+     * called "application.properties", then initialises the repositories with that connection.
+     *
+     * @throws IOException If there was a failure in loading the config file
+     */
     private void initializeDataSources() throws IOException {
-        Properties properties = loadConfig();
+        // Read in properties from file
+        Properties properties = new Properties();
+        try (var inStream = getClass().getResourceAsStream("/application.properties")) {
+            properties.load(inStream);
+        }
         var database = new Database(
                 properties.getProperty("DB_URL"),
                 properties.getProperty("DB_USERNAME"),
@@ -50,17 +62,7 @@ public class Main extends Application {
         artifactRepo = new ArtifactRepository(database, exhibitionRepo);
     }
 
-    private Properties loadConfig() throws IOException {
-        Properties properties = new Properties();
-        // Read properties
-        try (var inStream = getClass().getResourceAsStream("/application.properties")) {
-            properties.load(inStream);
-        }
-        return properties;
-    }
-
     public static void main(String[] args) {
         launch();
     }
-
 }

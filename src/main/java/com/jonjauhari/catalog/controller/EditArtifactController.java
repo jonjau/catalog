@@ -6,6 +6,9 @@ import com.jonjauhari.catalog.model.Dimensions;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+/**
+ * Controller responsible for the secondary view that allows users to edit an artifact.
+ */
 public class EditArtifactController {
 
     @FXML
@@ -35,17 +38,21 @@ public class EditArtifactController {
     private ArtifactRepository artifactRepo;
     private Artifact artifact;
 
+    /**
+     * @param artifactRepo artifact repo to get/set artifact data from and display
+     * @param artifact the artifact currently being edited in this view
+     */
     public EditArtifactController(ArtifactRepository artifactRepo, Artifact artifact) {
         this.artifactRepo = artifactRepo;
         this.artifact = artifact;
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
+        // set display values on fields
         nameTextField.setText(artifact.getName());
         descriptionTextArea.setText(artifact.getDescription());
         volumeTextField.setText(String.valueOf(artifact.getVolume()));
-
         mainButton.setOnAction(e -> saveArtifact());
 
         var dimensions = artifact.getDimensions();
@@ -55,6 +62,10 @@ public class EditArtifactController {
         initializeSpinner(weightSpinner, artifact.getWeight());
     }
 
+    /**
+     * @param spinner the spinner to initialise (setting properties)
+     * @param startVal the value that the spinner starts at
+     */
     private void initializeSpinner(Spinner<Double> spinner, double startVal) {
         spinner.setEditable(true);
         spinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(
@@ -62,6 +73,9 @@ public class EditArtifactController {
         enableScrollControl(spinner);
     }
 
+    /**
+     * Enable mouse scroll to increment or decrement a spinner's value
+     */
     private <T> void enableScrollControl(Spinner<T> spinner) {
         spinner.setOnScroll(event -> {
             if (event.getDeltaY() > 0) {
@@ -74,6 +88,7 @@ public class EditArtifactController {
 
     @FXML
     private void saveArtifact() {
+        // extract values from view, then save the artifact on the repo
         var name = nameTextField.getText();
         var description = descriptionTextArea.getText();
         var length = lengthSpinner.getValue();
@@ -88,6 +103,7 @@ public class EditArtifactController {
 
         artifactRepo.save(artifact);
 
+        // recalculate and update the volume field
         volumeTextField.setText(String.valueOf(artifact.getVolume()));
     }
 }

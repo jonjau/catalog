@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+/**
+ * Controller responsible for the secondary view that allows users to delete artifacts.
+ */
 public class DeleteArtifactController {
 
     @FXML
@@ -15,21 +18,27 @@ public class DeleteArtifactController {
 
     private ArtifactRepository artifactRepo;
 
+    /**
+     * @param artifactRepo artifact repo to delete artifacts from
+     */
     public DeleteArtifactController(ArtifactRepository artifactRepo) {
         this.artifactRepo = artifactRepo;
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         mainButton.setOnAction(e -> deleteArtifactClicked());
     }
 
     @FXML
     private void deleteArtifactClicked() {
 
-        // FIXME: non-existent artifact!
         long id = Long.parseLong(idTextField.getText());
         var toDelete = artifactRepo.findById(id);
+        if (toDelete == null) {
+            //  non-existent artifact, do nothing
+            return;
+        }
         artifactRepo.delete(toDelete);
     }
 }

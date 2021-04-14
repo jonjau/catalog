@@ -18,6 +18,11 @@ import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller responsible for the main dashboard view which allows users to view, edit and add new
+ * artifacts and exhibitions. It will load up secondary views on one of its panes as needed to
+ * accommodate that functionality.
+ */
 public class DashboardController {
 
     @FXML
@@ -47,11 +52,26 @@ public class DashboardController {
     @FXML
     private Button refreshExhibitionsButton;
 
+    private ArtifactRepository artifactRepo;
+    private ExhibitionRepository exhibitionRepo;
+
+    /**
+     * @param artifactRepo artifact repo to get/set artifact data from and display
+     * @param exhibitionRepo exhibition repo to get/set exhibition data from and display
+     */
+    public DashboardController(ArtifactRepository artifactRepo,
+                               ExhibitionRepository exhibitionRepo) {
+        this.artifactRepo = artifactRepo;
+        this.exhibitionRepo = exhibitionRepo;
+    }
+
     @FXML
-    public void initialize() {
+    private void initialize() {
+        // fetch data from repos to display on view
         refreshArtifacts();
         refreshExhibitions();
 
+        // set up listeners
         artifactListView.setOnMouseClicked(e -> editArtifactClicked());
         exhibitionListView.setOnMouseClicked(e -> editExhibitionClicked());
         addArtifactButton.setOnAction(e -> addArtifactClicked());
@@ -62,17 +82,9 @@ public class DashboardController {
         refreshExhibitionsButton.setOnAction(e -> refreshExhibitions());
     }
 
-    private ArtifactRepository artifactRepo;
-    private ExhibitionRepository exhibitionRepo;
-
-    public DashboardController(ArtifactRepository artifactRepo,
-                               ExhibitionRepository exhibitionRepo) {
-        this.artifactRepo = artifactRepo;
-        this.exhibitionRepo = exhibitionRepo;
-    }
-
     @FXML
     private void refreshArtifacts() {
+        // artifacts to be displayed on the list are those not being displayed in any exhibitions
         List<Artifact> inStorage = artifactRepo.findAll().stream().filter(
                 artifact -> artifact.getLocation() == null
         ).collect(Collectors.toList());
@@ -83,10 +95,17 @@ public class DashboardController {
 
     @FXML
     private void refreshExhibitions() {
+        // fetch all exhibition data from repo and display on view
         var exhibitions = FXCollections.observableArrayList(exhibitionRepo.findAll());
         exhibitionListView.setItems(exhibitions);
     }
 
+    /**
+     * Clear, then load up a view from an FXML file, assigning a controller to that view.
+     * If loading the FXML file fails, this function is a no-op (it dumps the stack trace)
+     * @param FXMLFilePath path to the view to load into the details pane
+     * @param controller the controller to assign the new view
+     */
     private void changeDetailsPane(String FXMLFilePath, Object controller) {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -94,6 +113,7 @@ public class DashboardController {
             loader.setController(controller);
             loader.setLocation(xmlUrl);
             Parent root = loader.load();
+
             detailsPane.getChildren().clear();
             detailsPane.getChildren().add(root);
 
@@ -104,14 +124,19 @@ public class DashboardController {
 
     @FXML
     private void editArtifactClicked() {
-        // null pointer error if clicked outside listitems
         var selectedArtifact = artifactListView.getSelectionModel().getSelectedItem();
+        if (selectedArtifact == null) {
+            // user clicked outside list items: don't do anything
+            return;
+        }
+        // load up view and controller to edit the selected artifact
         changeDetailsPane("/editArtifactScene.fxml", new EditArtifactController(artifactRepo,
                 selectedArtifact));
     }
 
     @FXML
     private void addArtifactClicked() {
+        // load up view and controller to edit this artifact, newly created with defaults
         var newArtifact = new Artifact("", "", new Dimensions(10, 10, 10), 1);
         changeDetailsPane("/editArtifactScene.fxml", new EditArtifactController(artifactRepo,
                 newArtifact));
@@ -119,12 +144,19 @@ public class DashboardController {
 
     @FXML
     private void deleteArtifactClicked() {
+        // load up view and controller to delete artifacts
         changeDetailsPane("/deleteArtifactScene.fxml", new DeleteArtifactController(artifactRepo));
     }
 
     @FXML
     private void editExhibitionClicked() {
         var selectedExhibition = exhibitionListView.getSelectionModel().getSelectedItem();
+        if (selectedExhibition == null) {
+            // clicked outside listitems: don't do anything
+            return;
+        }
+        // load up view and controller to edit the selected exhibition
+        // also inject the list of artifacts that can potentially be added to the exhibition
         var artifactSelections = artifactListView.getItems();
         changeDetailsPane("/editExhibitionScene.fxml", new EditExhibitionController(exhibitionRepo,
                 selectedExhibition, artifactSelections));
@@ -132,6 +164,7 @@ public class DashboardController {
 
     @FXML
     private void addExhibitionClicked() {
+        // load up view and controller to edit this exhibition, newly created with defaults
         var newExhibition = new Exhibition("", "");
         var artifactSelections = artifactListView.getItems();
         changeDetailsPane("/editExhibitionScene.fxml", new EditExhibitionController(exhibitionRepo,
@@ -140,6 +173,7 @@ public class DashboardController {
 
     @FXML
     private void deleteExhibitionClicked() {
+        // load up view and controller to delete exhibitions
         changeDetailsPane("/deleteExhibitionScene.fxml",
                 new DeleteExhibitionController(exhibitionRepo));
     }

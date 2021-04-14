@@ -36,12 +36,10 @@
                     <Color red="0.624" green="0.624" blue="0.624" />
                 </textFill>
             </Label>
-            <Button fx:id="addArtifactButton" layoutX="14.0" layoutY="67.0" mnemonicParsing="false"  prefHeight="26.0" prefWidth="194.0" text="Add artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+            <Button fx:id="addArtifactButton" layoutX="14.0" layoutY="67.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" text="Add artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          <Button fx:id="deleteArtifactButton" layoutX="14.0" layoutY="111.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" text="Delete artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          <Button fx:id="addExhibitionButton" layoutX="14.0" layoutY="180.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" text="Add exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          <Button fx:id="deleteExhibitionButton" layoutX="14.0" layoutY="223.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" text="Delete exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-         <Button layoutX="14.0" layoutY="282.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" text="Add topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-         <Button layoutX="14.0" layoutY="328.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" text="Delete topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
         </AnchorPane>
       <AnchorPane prefWidth="160.0">
          <children>
@@ -49,7 +47,7 @@
                <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="546.0">
                <TabPane layoutX="14.0" layoutY="41.0" prefHeight="472.0" prefWidth="413.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0">
                  <tabs>
-                   <Tab text="Artifacts">
+                   <Tab text="Artifacts in storage">
                      <content>
                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                               <children>
