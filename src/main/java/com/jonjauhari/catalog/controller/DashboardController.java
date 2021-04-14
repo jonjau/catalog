@@ -103,6 +103,7 @@ public class DashboardController {
 
     @FXML
     private void editArtifactClicked() {
+        // null pointer error if clicked outside listitems
         var selectedArtifact = artifactListView.getSelectionModel().getSelectedItem();
         changeDetailsPane("/editArtifactScene.fxml", new EditArtifactController(database,
                 selectedArtifact));

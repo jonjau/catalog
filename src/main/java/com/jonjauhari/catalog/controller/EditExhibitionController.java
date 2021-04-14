@@ -25,6 +25,9 @@ public class EditExhibitionController {
     @FXML
     private ChoiceBox<Artifact> addArtifactChoiceBox;
 
+    @FXML
+    private ChoiceBox<Artifact> deleteArtifactChoiceBox;
+
     private Database database;
     private Exhibition exhibition;
     private ObservableList<Artifact> artifactSelections;
@@ -42,17 +45,27 @@ public class EditExhibitionController {
         descriptionTextArea.setText(exhibition.getDescription());
         addArtifactChoiceBox.setItems(artifactSelections);
 
+//        var artifacts = FXCollections.observableArrayList(exhibition.getArtifacts());
+//        deleteArtifactChoiceBox.setItems(artifacts);
+
         mainButton.setOnAction(e -> saveExhibition());
         addArtifactChoiceBox.setOnAction(e -> addArtifactToExhibition());
+        deleteArtifactChoiceBox.setOnAction(e -> {
+            System.out.println(e.getEventType());
+            deleteArtifactFromExhibition();
+        });
 
-        var artifacts = FXCollections.observableArrayList(exhibition.getArtifacts());
-        artifactListView.setItems(artifacts);
+        refreshArtifactsList();
+
     }
 
     private void refreshArtifactsList() {
-        this.exhibition = database.getExhibition(exhibition.getId());
+        if (exhibition.getId() != null) {
+            this.exhibition = database.getExhibition(exhibition.getId());
+        }
         var artifacts = FXCollections.observableArrayList(exhibition.getArtifacts());
         artifactListView.setItems(artifacts);
+        deleteArtifactChoiceBox.setItems(artifacts);
     }
 
     private void saveExhibition() {
@@ -67,9 +80,19 @@ public class EditExhibitionController {
 
     private void addArtifactToExhibition() {
         Artifact artifact = addArtifactChoiceBox.getValue();
-        System.out.println(artifact);
         exhibition.addArtifact(artifact);
 
+        database.saveExhibition(exhibition);
+        refreshArtifactsList();
+    }
+
+    private void deleteArtifactFromExhibition() {
+        Artifact artifact = deleteArtifactChoiceBox.getValue();
+        if (artifact == null) {
+            return;
+        }
+
+        exhibition.deleteArtifact(artifact);
         database.saveExhibition(exhibition);
         refreshArtifactsList();
     }

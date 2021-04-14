@@ -32,6 +32,11 @@ public class Exhibition {
         artifacts.add(artifact);
     }
 
+    public void deleteArtifact(Artifact artifact) {
+        artifact.setLocation(null);
+        artifacts.remove(artifact);
+    }
+
     public List<Artifact> getArtifacts() {
         return artifacts;
     }

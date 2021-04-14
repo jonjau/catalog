@@ -58,10 +58,11 @@ public class Database {
     }
 
     public void updateExhibition(Exhibition exhibition) {
+        deleteExhibition(exhibition);
         try (
                 var ps1 = prepare(
-                        "UPDATE exhibition SET name = ?, description = ? WHERE id = ?",
-                        exhibition.getName(), exhibition.getDescription(), exhibition.getId());
+                        "INSERT INTO exhibition (id, name, description) VALUES (?, ?, ?)",
+                        exhibition.getId(), exhibition.getName(), exhibition.getDescription())
         ) {
             ps1.executeUpdate();
             for (var artifact : exhibition.getArtifacts()) {
@@ -73,7 +74,6 @@ public class Database {
                     ps2.executeUpdate();
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

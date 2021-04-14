@@ -1,10 +1,28 @@
 package com.jonjauhari.catalog.model;
 
+import java.util.Objects;
+
 public class Artifact {
     private Long id;
     private String name;
     private String description;
     private Exhibition location;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Artifact artifact = (Artifact) o;
+        return Objects.equals(id, artifact.id) &&
+                name.equals(artifact.name) &&
+                description.equals(artifact.description) &&
+                Objects.equals(location, artifact.location);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, location);
+    }
 
     public Artifact(Long id, String name, String description) {
         this.id = id;
