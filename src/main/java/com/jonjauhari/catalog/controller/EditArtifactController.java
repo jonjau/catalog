@@ -1,6 +1,6 @@
 package com.jonjauhari.catalog.controller;
 
-import com.jonjauhari.catalog.Database;
+import com.jonjauhari.catalog.repository.ArtifactRepository;
 import com.jonjauhari.catalog.model.Artifact;
 import com.jonjauhari.catalog.model.Dimensions;
 import javafx.fxml.FXML;
@@ -29,11 +29,14 @@ public class EditArtifactController {
     @FXML
     private Spinner<Double> weightSpinner;
 
-    private Database database;
+    @FXML
+    private TextField volumeTextField;
+
+    private ArtifactRepository artifactRepo;
     private Artifact artifact;
 
-    public EditArtifactController(Database database, Artifact artifact) {
-        this.database = database;
+    public EditArtifactController(ArtifactRepository artifactRepo, Artifact artifact) {
+        this.artifactRepo = artifactRepo;
         this.artifact = artifact;
     }
 
@@ -41,6 +44,7 @@ public class EditArtifactController {
     public void initialize() {
         nameTextField.setText(artifact.getName());
         descriptionTextArea.setText(artifact.getDescription());
+        volumeTextField.setText(String.valueOf(artifact.getVolume()));
 
         mainButton.setOnAction(e -> saveArtifact());
 
@@ -52,6 +56,7 @@ public class EditArtifactController {
     }
 
     private void initializeSpinner(Spinner<Double> spinner, double startVal) {
+        spinner.setEditable(true);
         spinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(
                 0.1, 10000, startVal, 0.1));
         enableScrollControl(spinner);
@@ -81,10 +86,8 @@ public class EditArtifactController {
         artifact.setDimensions(new Dimensions(length, width, height));
         artifact.setWeight(weight);
 
-        if (artifact.getId() != null) {
-            database.updateArtifact(artifact);
-        } else {
-            database.insertArtifact(artifact);
-        }
+        artifactRepo.save(artifact);
+
+        volumeTextField.setText(String.valueOf(artifact.getVolume()));
     }
 }

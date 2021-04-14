@@ -1,8 +1,8 @@
 package com.jonjauhari.catalog.controller;
 
-import com.jonjauhari.catalog.Database;
 import com.jonjauhari.catalog.model.Artifact;
 import com.jonjauhari.catalog.model.Exhibition;
+import com.jonjauhari.catalog.repository.ExhibitionRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,13 +28,13 @@ public class EditExhibitionController {
     @FXML
     private ChoiceBox<Artifact> deleteArtifactChoiceBox;
 
-    private Database database;
+    private ExhibitionRepository exhibitionRepo;
     private Exhibition exhibition;
     private ObservableList<Artifact> artifactSelections;
 
-    public EditExhibitionController(Database database, Exhibition exhibition,
+    public EditExhibitionController(ExhibitionRepository exhibitionRepo, Exhibition exhibition,
                                     ObservableList<Artifact> artifactSelections) {
-        this.database = database;
+        this.exhibitionRepo = exhibitionRepo;
         this.exhibition = exhibition;
         this.artifactSelections = artifactSelections;
     }
@@ -44,9 +44,6 @@ public class EditExhibitionController {
         nameTextField.setText(exhibition.getName());
         descriptionTextArea.setText(exhibition.getDescription());
         addArtifactChoiceBox.setItems(artifactSelections);
-
-//        var artifacts = FXCollections.observableArrayList(exhibition.getArtifacts());
-//        deleteArtifactChoiceBox.setItems(artifacts);
 
         mainButton.setOnAction(e -> saveExhibition());
         addArtifactChoiceBox.setOnAction(e -> addArtifactToExhibition());
@@ -58,7 +55,7 @@ public class EditExhibitionController {
 
     private void refreshArtifactsList() {
         if (exhibition.getId() != null) {
-            this.exhibition = database.getExhibition(exhibition.getId());
+            this.exhibition = exhibitionRepo.findById(exhibition.getId());
         }
         var artifacts = FXCollections.observableArrayList(exhibition.getArtifacts());
         artifactListView.setItems(artifacts);
@@ -72,14 +69,14 @@ public class EditExhibitionController {
         exhibition.setName(name);
         exhibition.setDescription(description);
 
-        database.saveExhibition(exhibition);
+        exhibitionRepo.save(exhibition);
     }
 
     private void addArtifactToExhibition() {
         Artifact artifact = addArtifactChoiceBox.getValue();
         exhibition.addArtifact(artifact);
 
-        database.saveExhibition(exhibition);
+        exhibitionRepo.save(exhibition);
         refreshArtifactsList();
     }
 
@@ -90,7 +87,7 @@ public class EditExhibitionController {
         }
 
         exhibition.deleteArtifact(artifact);
-        database.saveExhibition(exhibition);
+        exhibitionRepo.save(exhibition);
         refreshArtifactsList();
     }
 }

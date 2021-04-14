@@ -1,6 +1,6 @@
 package com.jonjauhari.catalog.controller;
 
-import com.jonjauhari.catalog.Database;
+import com.jonjauhari.catalog.repository.ExhibitionRepository;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -13,10 +13,10 @@ public class DeleteExhibitionController {
     @FXML
     private TextField idTextField;
 
-    private Database database;
+    private ExhibitionRepository exhibitionRepo;
 
-    public DeleteExhibitionController(Database database) {
-        this.database = database;
+    public DeleteExhibitionController(ExhibitionRepository exhibitionRepo) {
+        this.exhibitionRepo = exhibitionRepo;
     }
 
     @FXML
@@ -28,7 +28,7 @@ public class DeleteExhibitionController {
     private void deleteExhibitionClicked() {
 
         long id = Long.parseLong(idTextField.getText());
-        var toDelete = database.getExhibition(id);
-        database.deleteExhibition(toDelete);
+        var toDelete = exhibitionRepo.findById(id);
+        exhibitionRepo.delete(toDelete);
     }
 }

@@ -17,7 +17,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jonjauhari.catalog.controller.DashboardController">
+<VBox prefHeight="600.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" text="Quit" />
@@ -36,12 +36,12 @@
                     <Color red="0.624" green="0.624" blue="0.624" />
                 </textFill>
             </Label>
-            <Button layoutX="14.0" layoutY="67.0" mnemonicParsing="false" onAction="#addArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Add artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-         <Button  layoutX="14.0" layoutY="111.0" mnemonicParsing="false" onAction="#deleteArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Delete artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-         <Button  layoutX="14.0" layoutY="180.0" mnemonicParsing="false" onAction="#addExhibitionClicked" prefHeight="26.0" prefWidth="194.0" text="Add exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-         <Button layoutX="14.0" layoutY="223.0" mnemonicParsing="false" onAction="#deleteExhibitionClicked" prefHeight="26.0" prefWidth="194.0" text="Delete exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-         <Button layoutX="14.0" layoutY="282.0" mnemonicParsing="false" onAction="#editArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Add topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-         <Button layoutX="14.0" layoutY="328.0" mnemonicParsing="false" onAction="#editArtifactClicked" prefHeight="26.0" prefWidth="194.0" text="Delete topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+            <Button fx:id="addArtifactButton" layoutX="14.0" layoutY="67.0" mnemonicParsing="false"  prefHeight="26.0" prefWidth="194.0" text="Add artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         <Button fx:id="deleteArtifactButton" layoutX="14.0" layoutY="111.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" text="Delete artifact" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         <Button fx:id="addExhibitionButton" layoutX="14.0" layoutY="180.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" text="Add exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         <Button fx:id="deleteExhibitionButton" layoutX="14.0" layoutY="223.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" text="Delete exhibition" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         <Button layoutX="14.0" layoutY="282.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" text="Add topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         <Button layoutX="14.0" layoutY="328.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="194.0" text="Delete topic" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
         </AnchorPane>
       <AnchorPane prefWidth="160.0">
          <children>
@@ -53,7 +53,7 @@
                      <content>
                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                               <children>
-                                 <Button mnemonicParsing="false" onAction="#refreshArtifacts" text="Refresh" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                                 <Button fx:id="refreshArtifactsButton" mnemonicParsing="false" text="Refresh" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                                      <ListView fx:id="artifactListView" prefHeight="351.0" prefWidth="400.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="59.0" />
                               </children>
                            </AnchorPane>
@@ -63,7 +63,7 @@
                      <content>
                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                               <children>
-                                 <Button mnemonicParsing="false" onAction="#refreshExhibitions" text="Refresh" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                                 <Button fx:id="refreshExhibitionsButton" mnemonicParsing="false" text="Refresh" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                                  <ListView fx:id="exhibitionListView" prefHeight="351.0" prefWidth="400.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="59.0" />
                               </children>
                            </AnchorPane>
