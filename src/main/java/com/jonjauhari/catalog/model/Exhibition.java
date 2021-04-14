@@ -67,11 +67,6 @@ public class Exhibition {
 
     @Override
     public String toString() {
-        return "Exhibition{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", artifacts=" + artifacts +
-                '}';
+        return "#" + id + " " + name + " (" + artifacts.size() + ")" +  " | " + description;
     }
 }

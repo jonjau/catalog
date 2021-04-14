@@ -2,12 +2,12 @@ package com.jonjauhari.catalog.controller;
 
 import com.jonjauhari.catalog.Database;
 import com.jonjauhari.catalog.model.Artifact;
+import com.jonjauhari.catalog.model.Dimensions;
 import com.jonjauhari.catalog.model.Exhibition;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 
@@ -39,30 +39,6 @@ public class DashboardController {
         });
         exhibitionListView.setOnMouseClicked(e -> {
             editExhibitionClicked();
-        });
-
-        artifactListView.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Artifact item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null || item.getName() == null) {
-                    setText(null);
-                } else {
-                    setText(item.getId() + " | " + item.getName() + " | " + item.getDescription());
-                }
-            }
-        });
-
-        exhibitionListView.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Exhibition item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null || item.getName() == null) {
-                    setText(null);
-                } else {
-                    setText(item.getId() + " | " + item.getName() + " | " + item.getDescription());
-                }
-            }
         });
     }
 
@@ -111,7 +87,7 @@ public class DashboardController {
 
     @FXML
     private void addArtifactClicked() {
-        var newArtifact = new Artifact("", "");
+        var newArtifact = new Artifact("", "", new Dimensions(10,10,10), 1);
         changeDetailsPane("/editArtifactScene.fxml", new EditArtifactController(database,
                 newArtifact));
     }

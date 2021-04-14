@@ -1,6 +1,7 @@
 package com.jonjauhari.catalog;
 
 import com.jonjauhari.catalog.model.Artifact;
+import com.jonjauhari.catalog.model.Dimensions;
 import com.jonjauhari.catalog.model.Exhibition;
 
 import java.sql.*;
@@ -131,8 +132,14 @@ public class Database {
                 long arId = result.getLong(4);
                 String arName = result.getString(5);
                 String arDesc = result.getString(6);
+                double arLength = result.getDouble(7);
+                double arWidth = result.getDouble(8);
+                double arHeight = result.getDouble(9);
+                double arWeight = result.getDouble(10);
+
                 if (!result.wasNull()) {
-                    artifacts.add(new Artifact(arId, arName, arDesc));
+                    artifacts.add(new Artifact(arId, arName, arDesc, new Dimensions(arLength,
+                            arWidth, arHeight), arWeight));
                 }
                 prevEx = currEx;
             }
@@ -176,8 +183,13 @@ public class Database {
                 long id = result.getLong("id");
                 String name = result.getString("name");
                 String desc = result.getString("description");
+                double length = result.getDouble("length");
+                double width = result.getDouble("width");
+                double height = result.getDouble("height");
+                double weight = result.getDouble("weight");
 
-                var artifact = new Artifact(id, name, desc);
+                var artifact = new Artifact(id, name, desc, new Dimensions(length, width, height),
+                        weight);
 
                 long exId = result.getLong("exhibitionId");
                 if (!result.wasNull()) {
@@ -202,10 +214,14 @@ public class Database {
     }
 
     public void updateArtifact(Artifact artifact) {
+        var dimensions = artifact.getDimensions();
         try (
                 var ps = prepare(
-                        "UPDATE artifact SET name=?, description=? WHERE id=?",
-                        artifact.getName(), artifact.getDescription(), artifact.getId())
+                        "UPDATE artifact SET name=?, description=?, length=?, width=?, " +
+                                "height=?, weight=? WHERE id=?",
+                        artifact.getName(), artifact.getDescription(),
+                        dimensions.length, dimensions.width, dimensions.height,
+                        artifact.getWeight(), artifact.getId())
         ) {
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -214,10 +230,13 @@ public class Database {
     }
 
     public void insertArtifact(Artifact artifact) {
+        var dimensions = artifact.getDimensions();
         try (
                 var ps = prepare(
-                        "INSERT INTO artifact (name, description) VALUES (?, ?)",
-                        artifact.getName(), artifact.getDescription())
+                        "INSERT INTO artifact (name, description, length, width, height, weight) " +
+                                "VALUES (?, ?, ?, ?, ?, ?)",
+                        artifact.getName(), artifact.getDescription(), dimensions.length,
+                        dimensions.width, dimensions.height, artifact.getWeight())
         ) {
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();

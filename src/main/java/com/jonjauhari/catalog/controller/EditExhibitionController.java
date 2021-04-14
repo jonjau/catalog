@@ -50,10 +50,7 @@ public class EditExhibitionController {
 
         mainButton.setOnAction(e -> saveExhibition());
         addArtifactChoiceBox.setOnAction(e -> addArtifactToExhibition());
-        deleteArtifactChoiceBox.setOnAction(e -> {
-            System.out.println(e.getEventType());
-            deleteArtifactFromExhibition();
-        });
+        deleteArtifactChoiceBox.setOnAction(e -> deleteArtifactFromExhibition());
 
         refreshArtifactsList();
 
