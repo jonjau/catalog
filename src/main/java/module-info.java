@@ -1,4 +1,5 @@
-module com.github.jonjau {
+open module com.jonjauhari.catalog {
     requires javafx.controls;
-    exports com.github.jonjau;
+    requires javafx.fxml;
+    requires java.sql;
 }
