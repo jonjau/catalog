@@ -137,7 +137,7 @@ public class DashboardController {
     @FXML
     private void addArtifactClicked() {
         // load up view and controller to edit this artifact, newly created with defaults
-        var newArtifact = new Artifact("", "", new Dimensions(10, 10, 10), 1);
+        var newArtifact = new Artifact("", "", new Dimensions(0.5, 0.5, 0.5), 1);
         changeDetailsPane("/editArtifactScene.fxml", new EditArtifactController(artifactRepo,
                 newArtifact));
     }

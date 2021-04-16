@@ -30,7 +30,9 @@
       <Label layoutX="247.0" layoutY="126.0" text="Artifacts on display" />
       <ChoiceBox fx:id="addArtifactChoiceBox" layoutX="338.0" layoutY="362.0" prefHeight="26.0" prefWidth="142.0" />
       <Label layoutX="247.0" layoutY="366.0" text="Add artifact" />
-      <Label layoutX="247.0" layoutY="406.0" text="Delete Artifact" />
+      <Label layoutX="247.0" layoutY="406.0" text="Remove artifact" />
       <ChoiceBox fx:id="deleteArtifactChoiceBox" layoutX="338.0" layoutY="402.0" prefHeight="26.0" prefWidth="142.0" />
+      <TextField fx:id="valueTextField" editable="false" layoutX="432.0" layoutY="74.0" prefHeight="26.0" prefWidth="49.0" />
+      <Label layoutX="323.0" layoutY="78.0" text="Estimated Value: $" />
  </AnchorPane>
 </VBox>

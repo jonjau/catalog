@@ -71,10 +71,11 @@ public class ExhibitionRepository implements Repository<Exhibition, Long> {
                 long arId = result.getLong(4);
                 String arName = result.getString(5);
                 String arDesc = result.getString(6);
-                double arLength = result.getDouble(7);
-                double arWidth = result.getDouble(8);
-                double arHeight = result.getDouble(9);
-                double arWeight = result.getDouble(10);
+                // 7th column is exhibitionId
+                double arLength = result.getDouble(8);
+                double arWidth = result.getDouble(9);
+                double arHeight = result.getDouble(10);
+                double arWeight = result.getDouble(11);
 
                 // if the last artifact field was not null, we assume all the other artifact fields
                 // were not null, so add that artifact to the current aggregated list
@@ -85,8 +86,8 @@ public class ExhibitionRepository implements Repository<Exhibition, Long> {
                 prevEx = currEx;
             }
             // check for the last exhibition, finishing the sliding window
-            if (prevEx != null &&
-                    !exhibitions.get(exhibitions.size() - 1).getId().equals(prevEx.getId())) {
+            if (prevEx != null && (exhibitions.isEmpty() ||
+                    !exhibitions.get(exhibitions.size() - 1).getId().equals(prevEx.getId()))) {
                 exhibitions.add(new Exhibition(
                         prevEx.getId(), prevEx.getName(),
                         prevEx.getDescription(),

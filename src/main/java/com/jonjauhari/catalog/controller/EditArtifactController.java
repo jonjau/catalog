@@ -35,6 +35,9 @@ public class EditArtifactController {
     @FXML
     private TextField volumeTextField;
 
+    @FXML
+    private TextField valueTextField;
+
     private ArtifactRepository artifactRepo;
     private Artifact artifact;
 
@@ -52,8 +55,9 @@ public class EditArtifactController {
         // set display values on fields
         nameTextField.setText(artifact.getName());
         descriptionTextArea.setText(artifact.getDescription());
-        volumeTextField.setText(String.valueOf(artifact.getVolume()));
         mainButton.setOnAction(e -> saveArtifact());
+
+        refreshFields();
 
         var dimensions = artifact.getDimensions();
         initializeSpinner(lengthSpinner, dimensions.length);
@@ -71,6 +75,12 @@ public class EditArtifactController {
         spinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(
                 0.1, 10000, startVal, 0.1));
         enableScrollControl(spinner);
+    }
+
+    private void refreshFields() {
+        // recalculate and update the volume and value field
+        volumeTextField.setText(String.valueOf(artifact.getVolume()));
+        valueTextField.setText(String.valueOf(artifact.appraise()));
     }
 
     /**
@@ -102,8 +112,6 @@ public class EditArtifactController {
         artifact.setWeight(weight);
 
         artifactRepo.save(artifact);
-
-        // recalculate and update the volume field
-        volumeTextField.setText(String.valueOf(artifact.getVolume()));
+        refreshFields();
     }
 }

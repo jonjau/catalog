@@ -31,6 +31,9 @@ public class EditExhibitionController {
     @FXML
     private ChoiceBox<Artifact> deleteArtifactChoiceBox;
 
+    @FXML
+    private TextField valueTextField;
+
     private ExhibitionRepository exhibitionRepo;
     private Exhibition exhibition;
     private ObservableList<Artifact> artifactSelections;
@@ -59,10 +62,10 @@ public class EditExhibitionController {
         addArtifactChoiceBox.setOnAction(e -> addArtifactToExhibition());
         deleteArtifactChoiceBox.setOnAction(e -> deleteArtifactFromExhibition());
 
-        refreshArtifactsList();
+        refresh();
     }
 
-    private void refreshArtifactsList() {
+    private void refresh() {
         // if this exhibition is yet to be inserted to the database, there is nothing to reset
         if (exhibition.getId() != null) {
             this.exhibition = exhibitionRepo.findById(exhibition.getId());
@@ -71,6 +74,8 @@ public class EditExhibitionController {
         var artifacts = FXCollections.observableArrayList(exhibition.getArtifacts());
         artifactListView.setItems(artifacts);
         deleteArtifactChoiceBox.setItems(artifacts);
+
+        valueTextField.setText(String.valueOf(exhibition.appraise()));
     }
 
     private void saveExhibition() {
@@ -90,7 +95,7 @@ public class EditExhibitionController {
         exhibition.addArtifact(artifact);
 
         exhibitionRepo.save(exhibition);
-        refreshArtifactsList();
+        refresh();
     }
 
     private void deleteArtifactFromExhibition() {
@@ -102,6 +107,6 @@ public class EditExhibitionController {
         // delete the artifact from this exhibition then save that updated exhibition
         exhibition.deleteArtifact(artifact);
         exhibitionRepo.save(exhibition);
-        refreshArtifactsList();
+        refresh();
     }
 }

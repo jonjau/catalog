@@ -1,11 +1,16 @@
 package com.jonjauhari.catalog.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
  * A physical artifact stored in a Museum
  */
-public class Artifact {
+public class Artifact implements Appraisable {
+
+    // how much is 1 kg/m^3 valued on average
+    private final static BigDecimal DENSITY_VALUATION = BigDecimal.TEN;
+
     private Long id;
     private String name;
     private String description;
@@ -42,6 +47,17 @@ public class Artifact {
      */
     public Artifact(String name, String description, Dimensions dimensions, double weight) {
         this(null, name, description, dimensions, weight);
+    }
+
+    /**
+     * Returns the value of this artifact, which is its density in multiplied by a fixed factor
+     *
+     * @return the estimated value of the exhibition
+     */
+    @Override
+    public BigDecimal appraise() {
+        BigDecimal density = new BigDecimal(weight/dimensions.getVolume());
+        return density.multiply(DENSITY_VALUATION);
     }
 
     @Override
@@ -115,6 +131,5 @@ public class Artifact {
 
     public void setDescription(String description) {
         this.description = description;
-
     }
 }

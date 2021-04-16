@@ -22,6 +22,7 @@ public class Database {
         this.url = url;
         this.username = username;
         this.password = password;
+        setUpTables();
     }
 
     /**
@@ -35,7 +36,6 @@ public class Database {
             }
             return connection;
         } catch (SQLException e) {
-            // impossible
             throw new IllegalStateException(e.getMessage());
         }
     }
@@ -55,5 +55,44 @@ public class Database {
             ps.setObject(i + 1, parameters[i]);
         }
         return ps;
+    }
+
+    private void setUpTables() {
+        try (
+                var ps1 = prepareQuery("USE catalog");
+                var ps2 = prepareQuery(
+                        "CREATE TABLE IF NOT EXISTS `exhibition` (\n" +
+                                "  `id` INT NOT NULL AUTO_INCREMENT,\n" +
+                                "  `name` VARCHAR(200) NOT NULL,\n" +
+                                "  `description` MEDIUMTEXT NOT NULL,\n" +
+                                "  PRIMARY KEY (`id`)\n" +
+                                ");"
+                );
+                var ps3 = prepareQuery(
+                        "CREATE TABLE IF NOT EXISTS `artifact` (\n" +
+                                "  `id` int NOT NULL AUTO_INCREMENT,\n" +
+                                "  `name` VARCHAR(200) NOT NULL,\n" +
+                                "  `description` MEDIUMTEXT NOT NULL,\n" +
+                                "  `exhibitionId` INT DEFAULT NULL,\n" +
+                                "  `length` DOUBLE NOT NULL,\n" +
+                                "  `width` DOUBLE NOT NULL,\n" +
+                                "  `height` DOUBLE NOT NULL,\n" +
+                                "  `weight` DOUBLE NOT NULL,\n" +
+                                "  PRIMARY KEY (`id`),\n" +
+                                "  KEY `exhibitionId_idx` (`exhibitionId`),\n" +
+                                "  CONSTRAINT `exhibitionId`\n" +
+                                "    FOREIGN KEY (`exhibitionId`)\n" +
+                                "    REFERENCES `exhibition` (`id`)\n" +
+                                "    ON DELETE SET NULL\n" +
+                                "    ON UPDATE CASCADE\n" +
+                                ");"
+                )
+        ) {
+            ps1.execute();
+            ps2.execute();
+            ps3.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
