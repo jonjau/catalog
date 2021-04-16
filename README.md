@@ -8,7 +8,7 @@ and out of exhibitions, which can also be thought of as categories.
 The application is available as a `Catalog.jar`, ready to be run directly. To run Catalog requires:
  
 * at least Java 11
-* as well as an instance of MySQL is running locally on port 3306.
+* an instance of MySQL running locally on port 3306.
 
 The database credentials are in `application.properties`.
 
