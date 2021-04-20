@@ -1,20 +1,3 @@
-CREATE TABLE IF NOT EXISTS `catalog`.`artifact` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(200) NOT NULL,
-  `description` MEDIUMTEXT NOT NULL,
-  `exhibitionId` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `exhibitionId_idx` (`exhibitionId` ASC) VISIBLE,
-  CONSTRAINT `exhibitionId`
-    FOREIGN KEY (`exhibitionId`)
-    REFERENCES `catalog`.`exhibition` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
-    
-SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'catalog';
-
-SHOW DATABASES LIKE 'cataloga';
-
 CREATE SCHEMA IF NOT EXISTS `catalog`;
 
 CREATE TABLE IF NOT EXISTS `artifact` (
